@@ -14,14 +14,11 @@ struct dsu{
         a = find(a);
         b = find(b);
         if(a == b) return false;
-        if(siz[a] >= siz[b]){
-            parent[b] = a;
-            siz[a]+=siz[b];
-            return true;
-        }else{
-            parent[a] = b;
-            siz[b]+=siz[a];
-            return true;
-        }
+        if(siz[a] < siz[b])
+            swap(a,b);
+        parent[b] = a;
+        siz[a]+=siz[b];
+        return true;
+
     }
 };
