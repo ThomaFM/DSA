@@ -3,3 +3,7 @@ Data Structures and Algorithms, mainly written to be short and reasonably fast s
 
 Item In this Repository:
 -DSU
+-BFS with path recovery
+-Djikstra's Algorithm for SSSP on weighted graphs
+-prime seive
+
