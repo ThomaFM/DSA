@@ -5,5 +5,5 @@ Item In this Repository:\
 -DSU\
 -BFS with path recovery\
 -Djikstra's Algorithm for SSSP on weighted graphs\
--prime seive
+-prime sieve
 
