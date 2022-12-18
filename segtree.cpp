@@ -10,8 +10,8 @@ struct ST{
         mid = (lo+hi)/2;
         val = IDEM;
         if(l==r) return;
-        left = new st(l,mid);
-        right = new st(mid+1,r);
+        left = new ST(l,mid);
+        right = new ST(mid+1,r);
     }
 
     int query(int l, int r){
