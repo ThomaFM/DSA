@@ -1,0 +1,51 @@
+//uses dsu rollback
+//solves dynamic connectivity problem offline (Q*lg^2)
+struct node{
+    int lo,hi,mid;
+    vector<pair<int,int>> edges;
+    node *left; node *right;
+    node(int l, int r){
+        lo = l; hi = r; mid = (lo+hi)/2;
+        if(lo==hi) return;
+        left = new node(l,mid);
+        right = new node(mid+1,r);
+    }
+
+    void addInterval(int l, int r, const pair<int,int> &edge){
+        if(l>hi || r < lo) return; //nocover
+        if(l<=lo&&hi<=r){ edges.emplace_back(edge); return; }
+        left->addInterval(l,r,edge);
+        right->addInterval(l,r,edge);
+    }
+
+    void dfs(dsuR &ds,vector<int> &ans){
+        int t = ds.time();
+        for(auto[u,v]: edges) ds.join(u,v);
+        if(lo==hi){
+            ans[lo] = ds.comps; //Answer Query
+        }
+        else { left->dfs(ds,ans); right->dfs(ds,ans); }
+        ds.rollback(t);
+        return;
+    }
+};
+
+vector<int> dc(vector<tuple<int,int,int>> &queries, int n){
+    vector<int> res(queries.size()); 
+    dsuR ds = dsuR(n);
+    node tree = node(0,queries.size()-1);
+    int ti = 0;
+    map<pair<int,int>, int> qTimes;
+    for(auto [qu, u, v]: queries){
+        if(u<v) swap(u,v);
+        if(qu == 1) qTimes[{u,v}] = ti;
+        if(qu == 2) {
+            tree.addInterval(qTimes[{u,v}],ti-1,{u,v});
+            qTimes.erase({u,v});
+        }
+        ti++;
+    }
+    for(auto[edge,tAdded]: qTimes) tree.addInterval(tAdded,ti,edge);
+    tree.dfs(ds,res);
+    return res;
+}
